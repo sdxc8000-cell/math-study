@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>数学学習アーカイブ</title>
+    <script src="uv.bundle.js" defer></script>
+    <script src="uv.config.js" defer></script>
+    <script src="uv.sw.js" defer></script>
+</head>
+<body style="font-family: sans-serif; text-align: center; padding-top: 50px;">
+    <h1>数学演習ポータル（計算機）</h1>
+    <p>URLを入力して学習リソースにアクセスしてください。</p>
+    
+    <form id="uv-form">
+        <input id="uv-address" type="text" placeholder="https://google.com" style="width: 300px; padding: 10px;">
+        <button type="submit" style="padding: 10px 20px;">開始</button>
+    </form>
+
+    <script>
+        // フォームが送信された時の処理
+        const form = document.getElementById('uv-form');
+        const address = document.getElementById('uv-address');
+
+        form.addEventListener('submit', async event => {
+            event.preventDefault();
+            window.navigator.serviceWorker.register('./uv.sw.js', {
+                scope: __uv$config.prefix
+            }).then(() => {
+                const url = address.value.trim();
+                // XORエンコードして自宅サーバー経由で開く
+                location.href = __uv$config.prefix + __uv$config.encodeUrl(url);
+            });
+        });
+    </script>
+</body>
+</html>
